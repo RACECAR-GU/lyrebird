@@ -44,6 +44,8 @@ import (
 	"sync"
 	"time"
 
+	utls "github.com/refraction-networking/utls"
+
 	"git.torproject.org/pluggable-transports/goptlib.git"
 	"gitlab.com/yawning/obfs4.git/transports/base"
 )
@@ -51,6 +53,7 @@ import (
 const (
 	urlArg   = "url"
 	frontArg = "front"
+	utlsArg  = "utls"
 
 	maxChanBacklog = 16
 
@@ -73,6 +76,8 @@ var (
 type meekClientArgs struct {
 	url   *gourl.URL
 	front string
+
+	utls *utls.ClientHelloID
 }
 
 func (ca *meekClientArgs) Network() string {
@@ -104,13 +109,19 @@ func newClientArgs(args *pt.Args) (ca *meekClientArgs, err error) {
 	// Parse the (optional) front argument.
 	ca.front, _ = args.Get(frontArg)
 
+	// Parse the (optional) utls argument.
+	utlsOpt, _ := args.Get(utlsArg)
+	if ca.utls, err = parseClientHelloID(utlsOpt); err != nil {
+		return nil, err
+	}
+
 	return ca, nil
 }
 
 type meekConn struct {
-	args      *meekClientArgs
-	sessionID string
-	transport *http.Transport
+	args         *meekClientArgs
+	sessionID    string
+	roundTripper http.RoundTripper
 
 	closeOnce       sync.Once
 	workerWrChan    chan []byte
@@ -242,7 +253,7 @@ func (c *meekConn) roundTrip(sndBuf []byte) (recvBuf []byte, err error) {
 		req.Header.Set("X-Session-Id", c.sessionID)
 		req.Header.Set("User-Agent", "")
 
-		resp, err = c.transport.RoundTrip(req)
+		resp, err = c.roundTripper.RoundTrip(req)
 		if err != nil {
 			return nil, err
 		}
@@ -343,10 +354,18 @@ func newMeekConn(network, addr string, dialFn base.DialFunc, ca *meekClientArgs)
 		return nil, err
 	}
 
+	var rt http.RoundTripper
+	switch ca.utls {
+	case nil:
+		rt = &http.Transport{Dial: dialFn}
+	default:
+		rt = newRoundTripper(dialFn, ca.utls)
+	}
+
 	conn := &meekConn{
 		args:            ca,
 		sessionID:       id,
-		transport:       &http.Transport{Dial: dialFn},
+		roundTripper:    rt,
 		workerWrChan:    make(chan []byte, maxChanBacklog),
 		workerRdChan:    make(chan []byte, maxChanBacklog),
 		workerCloseChan: make(chan struct{}),
