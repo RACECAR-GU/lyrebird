@@ -77,7 +77,7 @@ var (
 		"helloqq_auto":          &utls.HelloQQ_Auto,
 		"helloqq_11_1":          &utls.HelloQQ_11_1,
 	}
-	defaultClientHello = &utls.HelloFirefox_Auto
+	defaultClientHello = &utls.HelloChrome_Auto
 )
 
 type roundTripper struct {
