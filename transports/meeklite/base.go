@@ -36,7 +36,7 @@ import (
 	"fmt"
 	"net"
 
-	"git.torproject.org/pluggable-transports/goptlib.git"
+	"gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/goptlib"
 	"gitlab.com/yawning/obfs4.git/transports/base"
 )
 
