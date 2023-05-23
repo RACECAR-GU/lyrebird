@@ -10,4 +10,12 @@ require (
 	golang.org/x/net v0.9.0
 )
 
-go 1.16
+require (
+	github.com/andybalholm/brotli v1.0.4 // indirect
+	github.com/gaukas/godicttls v0.0.3 // indirect
+	github.com/klauspost/compress v1.15.15 // indirect
+	golang.org/x/sys v0.7.0 // indirect
+	golang.org/x/text v0.9.0 // indirect
+)
+
+go 1.19
