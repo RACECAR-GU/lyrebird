@@ -36,7 +36,7 @@ import (
 	"syscall"
 	"time"
 
-	"gitlab.com/yawning/obfs4.git/common/log"
+	"gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/lyrebird/common/log"
 )
 
 var termMonitorOSInit func(*termMonitor) error

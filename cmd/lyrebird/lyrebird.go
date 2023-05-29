@@ -42,10 +42,10 @@ import (
 	"syscall"
 
 	"gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/goptlib"
-	"gitlab.com/yawning/obfs4.git/common/log"
-	"gitlab.com/yawning/obfs4.git/common/socks5"
-	"gitlab.com/yawning/obfs4.git/transports"
-	"gitlab.com/yawning/obfs4.git/transports/base"
+	"gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/lyrebird/common/log"
+	"gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/lyrebird/common/socks5"
+	"gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/lyrebird/transports"
+	"gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/lyrebird/transports/base"
 	"golang.org/x/net/proxy"
 )
 

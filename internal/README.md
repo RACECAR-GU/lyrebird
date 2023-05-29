@@ -16,21 +16,3 @@ a standard X25519 scalar-multiply.
 As the representative to public key transform should be identical,
 this change is fully-backward compatible (though the non-upgraded side
 of the connection will still be trivially distinguishable from random).
-
-##### Maintainer's rant
-
-Honestly, it is possible to create a better obfuscation protocol than
-obfs4, and it's shelf-life expired years ago.  No one should be using
-it for anything at this point, and no one should have been using it
-for anything for the past however many years since I first started
-telling people to stop using it.
-
-People should also have listened when I told them repeatedly that there
-are massive issues in the protocol.
-
- * Do not ask me questions about this.
- * Do not use it in other projects.
- * Do not use it in anything new.
- * Use a prime order group instead of this nonsense especially if you
-   are doing something new.
- * All I want is to be left alone.

@@ -36,8 +36,8 @@ import (
 	"strconv"
 	"time"
 
-	"gitlab.com/yawning/obfs4.git/common/csrand"
-	"gitlab.com/yawning/obfs4.git/common/uniformdh"
+	"gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/lyrebird/common/csrand"
+	"gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/lyrebird/common/uniformdh"
 )
 
 const (

@@ -47,7 +47,7 @@ import (
 	utls "github.com/refraction-networking/utls"
 
 	"gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/goptlib"
-	"gitlab.com/yawning/obfs4.git/transports/base"
+	"gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/lyrebird/transports/base"
 )
 
 const (

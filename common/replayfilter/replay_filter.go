@@ -30,7 +30,7 @@
 // has been seen before based on the SipHash-2-4 digest of the sequence.
 // Collisions are treated as positive matches, though the probability of this
 // happening is negligible.
-package replayfilter // import "gitlab.com/yawning/obfs4.git/common/replayfilter"
+package replayfilter // import "gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/lyrebird/common/replayfilter"
 
 import (
 	"container/list"
@@ -39,7 +39,7 @@ import (
 	"time"
 
 	"github.com/dchest/siphash"
-	"gitlab.com/yawning/obfs4.git/common/csrand"
+	"gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/lyrebird/common/csrand"
 )
 
 // maxFilterSize is the maximum capacity of a replay filter.  This value is

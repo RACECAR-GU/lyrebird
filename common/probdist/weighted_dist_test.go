@@ -31,7 +31,7 @@ import (
 	"fmt"
 	"testing"
 
-	"gitlab.com/yawning/obfs4.git/common/drbg"
+	"gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/lyrebird/common/drbg"
 )
 
 const debug = false

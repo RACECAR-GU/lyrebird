@@ -1,4 +1,4 @@
-module gitlab.com/yawning/obfs4.git
+module gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/lyrebird
 
 require (
 	filippo.io/edwards25519 v1.0.0

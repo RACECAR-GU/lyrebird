@@ -27,7 +27,7 @@
 
 // Package base provides the common interface that each supported transport
 // protocol must implement.
-package base // import "gitlab.com/yawning/obfs4.git/transports/base"
+package base // import "gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/lyrebird/transports/base"
 
 import (
 	"net"
