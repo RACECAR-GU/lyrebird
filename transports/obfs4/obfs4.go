@@ -264,15 +264,11 @@ func (sf *obfs4ServerFactory) WrapConn(conn net.Conn) (net.Conn, error) {
 	
 	// If we are manipulating entropy, this must be established prior to reading data
 	if useEntropy { // TODO: fix
-		_, publicKey, err := ParseCert(sf.Args())
+		serverSeed, err := drbg.SeedFromBytes(sf.identityKey.Public().Bytes()[:drbg.SeedLength])
 		if err != nil {
 			return nil, err
 		}
-		serverSeed, err := drbg.SeedFromBytes(publicKey[:drbg.SeedLength])
-		if err != nil {
-			return nil, err
-		}
-		conn, err := riverrun.NewConn(conn, true, serverSeed)
+		conn, err = riverrun.NewConn(conn, true, serverSeed)
 		if err != nil {
 			return nil, err
 		}
@@ -317,14 +313,14 @@ func newObfs4ClientConn(conn net.Conn, args *obfs4ClientArgs) (c *obfs4Conn, err
 
 	if useEntropy { // TODO: fix
 		// Acquires a consistent seed for both sides of the transport
-		serverSeed, err := drbg.SeedFromBytes(args.PublicKey[:drbg.SeedLength])
+		serverSeed, err := drbg.SeedFromBytes(args.publicKey[:drbg.SeedLength])
 		if err != nil {
 			return nil, err
 		}
 
 		// Allocate the entropy connection
 		// We overwrite the inner connection used for obfs4
-		conn, err := riverrun.NewConn(conn, false, serverSeed)
+		conn, err = riverrun.NewConn(conn, false, serverSeed)
 		if err != nil {
 			return nil, err
 		}

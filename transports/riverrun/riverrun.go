@@ -9,12 +9,11 @@ import (
 	"gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/lyrebird/common/ctstretch"
 	"gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/lyrebird/common/drbg"
 	f "gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/lyrebird/transports/riverrun/framing"
-	"github.com/RACECAR-GU/obfsX/common/log"
+	"gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/lyrebird/common/log"
 	"io"
 	"math/rand"
 	"net"
 	"sync"
-	"syscall"
 )
 
 const (

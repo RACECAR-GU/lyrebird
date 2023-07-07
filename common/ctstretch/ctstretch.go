@@ -7,7 +7,7 @@ import (
 	"math"
 	"unsafe"
 
-	"github.com/RACECAR-GU/obfsX/common/log"
+	"gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/lyrebird/common/log"
 )
 
 // Swaps bits i and j in data.  Bit 0 is the first bit of data[0].
