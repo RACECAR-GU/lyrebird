@@ -49,6 +49,7 @@ import (
 	"gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/lyrebird/common/replayfilter"
 	"gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/lyrebird/transports/base"
 	"gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/lyrebird/transports/obfs4/framing"
+	"gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/lyrebird/transports/riverrun"
 )
 
 const (
@@ -71,6 +72,8 @@ const (
 
 	maxIATDelay   = 100
 	maxCloseDelay = 60
+	
+	useEntropy = true // TODO: Fix
 )
 
 const (
@@ -248,7 +251,7 @@ func (sf *obfs4ServerFactory) Args() *pt.Args {
 func (sf *obfs4ServerFactory) WrapConn(conn net.Conn) (net.Conn, error) {
 	// Not much point in having a separate newObfs4ServerConn routine when
 	// wrapping requires using values from the factory instance.
-
+	
 	// Generate the session keypair *before* consuming data from the peer, to
 	// attempt to mask the rejection sampling due to use of Elligator2.  This
 	// might be futile, but the timing differential isn't very large on modern
@@ -257,6 +260,22 @@ func (sf *obfs4ServerFactory) WrapConn(conn net.Conn) (net.Conn, error) {
 	sessionKey, err := ntor.NewKeypair(true)
 	if err != nil {
 		return nil, err
+	}
+	
+	// If we are manipulating entropy, this must be established prior to reading data
+	if useEntropy { // TODO: fix
+		_, publicKey, err := ParseCert(sf.Args())
+		if err != nil {
+			return nil, err
+		}
+		serverSeed, err := drbg.SeedFromBytes(publicKey[:drbg.SeedLength])
+		if err != nil {
+			return nil, err
+		}
+		conn, err := riverrun.NewConn(conn, true, serverSeed)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	lenDist := probdist.New(sf.lenSeed, 0, framing.MaximumSegmentLength, biasedDist)
@@ -295,6 +314,22 @@ type obfs4Conn struct {
 }
 
 func newObfs4ClientConn(conn net.Conn, args *obfs4ClientArgs) (c *obfs4Conn, err error) {
+
+	if useEntropy { // TODO: fix
+		// Acquires a consistent seed for both sides of the transport
+		serverSeed, err := drbg.SeedFromBytes(args.PublicKey[:drbg.SeedLength])
+		if err != nil {
+			return nil, err
+		}
+
+		// Allocate the entropy connection
+		// We overwrite the inner connection used for obfs4
+		conn, err := riverrun.NewConn(conn, false, serverSeed)
+		if err != nil {
+			return nil, err
+		}
+	}
+
 	// Generate the initial protocol polymorphism distribution(s).
 	var seed *drbg.Seed
 	if seed, err = drbg.NewSeed(); err != nil {
